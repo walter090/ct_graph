@@ -2,6 +2,7 @@ const express = require('express');
 const graphqlHttp = require('express-graphql');
 const {buildSchema} = require('graphql');
 const fetch = require('node-fetch');
+const API = require('./constants');
 
 const schema = buildSchema(`
   type Customer {
@@ -110,14 +111,14 @@ app.use(loggingMiddleware);
 
 const root = {
     getCustomer: async ({id}) => {
-        const response = await fetch(`http://localhost:8000/customers/${id}/`, {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}${id}/`, {
             method: 'get',
             headers: {'Authorization': token}
         });
         return response.json();
     },
     getTransaction: async ({id}) => {
-        const response = await fetch(`http://localhost:8001/transactions/${id}/`, {
+        const response = await fetch(`${API.TRANSACTION_API_ROOT}${id}/`, {
             method: 'get',
             headers: {'Authorization': token}
         });
@@ -127,7 +128,7 @@ const root = {
                             username, email, password, first_name,
                             last_name, birth_year, occupation_type, balance
                         }) => {
-        const response = await fetch(`http://localhost:8000/customers/`, {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}`, {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -138,7 +139,7 @@ const root = {
         return response.json()
     },
     addTransaction: async ({customer_id, amount, category, transfer_method}) => {
-        const response = await fetch(`http://localhost:8001/transactions/`, {
+        const response = await fetch(`${API.TRANSACTION_API_ROOT}`, {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({customer_id, amount, category, transfer_method})
