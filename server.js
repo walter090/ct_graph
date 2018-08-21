@@ -3,6 +3,7 @@ const graphqlHttp = require('express-graphql');
 const {buildSchema} = require('graphql');
 const fetch = require('node-fetch');
 const API = require('./constants');
+const cors = require('cors');
 require('url-search-params-polyfill');
 
 const schema = buildSchema(`
@@ -121,8 +122,16 @@ function loggingMiddleware(req, res, next) {
     next();
 }
 
+const corsOptions = {
+    origin(origin, callback) {
+        callback(null, true);
+    },
+    credentials: true
+};
+
 const app = express();
 app.use(loggingMiddleware);
+app.use(cors(corsOptions));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Origin", "Content-Type, Authorization, Accept, X-Requested-With");
