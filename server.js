@@ -135,7 +135,6 @@ app.use(cors(corsOptions));
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Origin", "Content-Type, Authorization, Accept, X-Requested-With");
-    res.header("Access-Control-Allow-Origin", "OPTIONS, TRACE, GET, HEAD, POST, PUT");
     res.header("Access-Control-Allow-Credentials", "true");
     next();
 });
