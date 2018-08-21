@@ -3,6 +3,7 @@ const graphqlHttp = require('express-graphql');
 const {buildSchema} = require('graphql');
 const fetch = require('node-fetch');
 const API = require('./constants');
+const cors = require('cors');
 require('url-search-params-polyfill');
 
 const schema = buildSchema(`
@@ -123,6 +124,7 @@ function loggingMiddleware(req, res, next) {
 
 const app = express();
 app.use(loggingMiddleware);
+app.use(cors);
 
 const root = {
     getCustomer: async ({id}) => {
