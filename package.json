@@ -21,6 +21,7 @@
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
-    "node-fetch": "^2.2.0"
+    "node-fetch": "^2.2.0",
+    "url-search-params-polyfill": "^4.0.1"
   }
 }
