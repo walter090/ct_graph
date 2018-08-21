@@ -3,6 +3,7 @@ const graphqlHttp = require('express-graphql');
 const {buildSchema} = require('graphql');
 const fetch = require('node-fetch');
 const API = require('./constants');
+require('url-search-params-polyfill');
 
 const schema = buildSchema(`
   type Customer {
@@ -34,6 +35,14 @@ const schema = buildSchema(`
     spending: String
     spending_ratio: String
     last_month_history: [Transaction]
+  }
+  
+  type Authentication {
+    access_token: String
+    expires_in: Int
+    token_type: String
+    error: String
+    error_description: String
   }
   
   type Query {
@@ -90,6 +99,12 @@ const schema = buildSchema(`
         category: Category!
         transfer_method: Method!
     ): Message
+    getAuthentication(
+        username: String!
+        password: String!
+        client_id: String!
+        grant_type: String!
+    ): Authentication
   }
   
   type Message {
@@ -111,14 +126,14 @@ app.use(loggingMiddleware);
 
 const root = {
     getCustomer: async ({id}) => {
-        const response = await fetch(`${API.CUSTOMER_API_ROOT}${id}/`, {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/${id}/`, {
             method: 'get',
             headers: {'Authorization': token}
         });
         return response.json();
     },
     getTransaction: async ({id}) => {
-        const response = await fetch(`${API.TRANSACTION_API_ROOT}${id}/`, {
+        const response = await fetch(`${API.TRANSACTION_API_ROOT}transactions/${id}/`, {
             method: 'get',
             headers: {'Authorization': token}
         });
@@ -128,7 +143,7 @@ const root = {
                             username, email, password, first_name,
                             last_name, birth_year, occupation_type, balance
                         }) => {
-        const response = await fetch(`${API.CUSTOMER_API_ROOT}`, {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/`, {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -139,10 +154,24 @@ const root = {
         return response.json()
     },
     addTransaction: async ({customer_id, amount, category, transfer_method}) => {
-        const response = await fetch(`${API.TRANSACTION_API_ROOT}`, {
+        const response = await fetch(`${API.TRANSACTION_API_ROOT}transactions/`, {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({customer_id, amount, category, transfer_method})
+        });
+        return response.json()
+    },
+    getAuthentication: async ({username, password, client_id, grant_type}) => {
+        const params = new URLSearchParams();
+        params.append('username', username);
+        params.append('password', password);
+        params.append('client_id', client_id);
+        params.append('grant_type', grant_type);
+
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}auth/token/`, {
+            method: 'post',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+            body: params
         });
         return response.json()
     },
