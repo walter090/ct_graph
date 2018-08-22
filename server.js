@@ -112,7 +112,7 @@ const schema = buildSchema(`
         last_name: String
         birth_year: Int
         occupation_type: Occupation
-    ): Message
+    ): Customer
     addTransaction(
         customer_id: String!
         amount: String!
