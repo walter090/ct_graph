@@ -17,6 +17,9 @@ const schema = buildSchema(`
     occupation_type: String
     balance: String
     transaction_info: TransactionHistory
+    detail: String
+    error: String
+    message: String
   }
   
   type Transaction {
@@ -26,6 +29,9 @@ const schema = buildSchema(`
     category: String
     transfer_method: String
     transfer_time: String
+    detail: String
+    error: String
+    message: String
   }
   
   type TransactionHistory {
@@ -36,6 +42,9 @@ const schema = buildSchema(`
     spending: String
     spending_ratio: String
     last_month_history: [Transaction]
+    detail: String
+    error: String
+    message: String
   }
   
   type Authentication {
@@ -48,6 +57,7 @@ const schema = buildSchema(`
   
   type Query {
     getCustomer(id: String!): Customer
+    getCustomerByUsername(username: String!): Customer
     getTransaction(id: String!): Transaction
   }
   
@@ -92,7 +102,6 @@ const schema = buildSchema(`
         last_name: String!
         birth_year: Int!
         occupation_type: Occupation!
-        balance: Int
     ): Message
     addTransaction(
         customer_id: String!
@@ -146,6 +155,13 @@ const root = {
         });
         return response.json();
     },
+    getCustomerByUsername: async ({username}) => {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/self/?username=${username}/`, {
+            method: 'get',
+            headers: {'Authorization': token}
+        });
+        return response.json();
+    },
     getTransaction: async ({id}) => {
         const response = await fetch(`${API.TRANSACTION_API_ROOT}transactions/${id}/`, {
             method: 'get',
@@ -155,14 +171,14 @@ const root = {
     },
     addCustomer: async ({
                             username, email, password, first_name,
-                            last_name, birth_year, occupation_type, balance
+                            last_name, birth_year, occupation_type
                         }) => {
         const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/`, {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({
                 username, email, password, first_name,
-                last_name, birth_year, occupation_type, balance
+                last_name, birth_year, occupation_type
             })
         });
         return response.json()
