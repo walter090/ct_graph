@@ -29,6 +29,7 @@ const schema = buildSchema(`
     category: String
     transfer_method: String
     transfer_time: String
+    balance_after: String
     detail: String
     error: String
     message: String
