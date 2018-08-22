@@ -156,7 +156,7 @@ const root = {
         return response.json();
     },
     getCustomerByUsername: async ({username}) => {
-        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/self/?username=${username}/`, {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/self/?username=${username}`, {
             method: 'get',
             headers: {'Authorization': token}
         });
