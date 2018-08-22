@@ -103,6 +103,16 @@ const schema = buildSchema(`
         birth_year: Int!
         occupation_type: Occupation!
     ): Message
+    patchCustomer(
+        identifier: String!
+        username: String
+        email: String
+        password: String
+        first_name: String
+        last_name: String
+        birth_year: Int
+        occupation_type: Occupation
+    ): Message
     addTransaction(
         customer_id: String!
         amount: String!
@@ -175,6 +185,20 @@ const root = {
                         }) => {
         const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/`, {
             method: 'post',
+            headers: {'Authorization': token, 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                username, email, password, first_name,
+                last_name, birth_year, occupation_type
+            })
+        });
+        return response.json()
+    },
+    patchCustomer: async ({
+                              identifier, username, email, password, first_name,
+                              last_name, birth_year, occupation_type
+                          }) => {
+        const response = await fetch(`${API.CUSTOMER_API_ROOT}customers/${identifier}/`, {
+            method: 'patch',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({
                 username, email, password, first_name,
