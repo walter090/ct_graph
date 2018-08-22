@@ -122,8 +122,8 @@ const schema = buildSchema(`
     getAuthentication(
         username: String!
         password: String!
-        client_id: String!
-        grant_type: String!
+        client_id: String
+        grant_type: String
     ): Authentication
   }
   
@@ -215,7 +215,12 @@ const root = {
         });
         return response.json()
     },
-    getAuthentication: async ({username, password, client_id, grant_type}) => {
+    getAuthentication: async ({
+                                  username,
+                                  password,
+                                  client_id = 'qDfWDHvWxfr03cCsEwfO6Bd4MjbB1nAdMTMCPgSu',
+                                  grant_type = 'password'
+                              }) => {
         const params = new URLSearchParams();
         params.append('username', username);
         params.append('password', password);
