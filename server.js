@@ -120,6 +120,12 @@ const schema = buildSchema(`
         category: Category!
         transfer_method: Method!
     ): Message
+    addTransactionByUsername(
+        username: String!
+        amount: String!
+        category: Category!
+        transfer_method: Method!
+    ): Message
     getAuthentication(
         username: String!
         password: String!
@@ -213,6 +219,14 @@ const root = {
             method: 'post',
             headers: {'Authorization': token, 'Content-Type': 'application/json'},
             body: JSON.stringify({customer_id, amount, category, transfer_method})
+        });
+        return response.json()
+    },
+    addTransactionByUsername: async ({username, amount, category, transfer_method}) => {
+        const response = await fetch(`${API.TRANSACTION_API_ROOT}transactions/create_by_username/`, {
+            method: 'post',
+            headers: {'Authorization': token, 'Content-Type': 'application/json'},
+            body: JSON.stringify({username, amount, category, transfer_method})
         });
         return response.json()
     },
