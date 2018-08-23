@@ -148,13 +148,6 @@ function loggingMiddleware(req, res, next) {
     next();
 }
 
-// const corsOptions = {
-//     origin(origin, callback) {
-//         callback(null, true);
-//     },
-//     credentials: true
-// };
-
 const app = express();
 app.use(loggingMiddleware);
 app.use(cors(corsOptions));
