@@ -18,25 +18,25 @@ query
 
 ```
 {
-	getCustomerByUsername(
-		username: "no_one"
-	){
-		identifier
-		message
-		error
-	}
+    getCustomerByUsername(
+	username: "no_one"
+    ){
+	identifier
+	message
+	error
+     }
 }
 ```
 returns
 ```json
 {
-	"data": {
-		"getCustomerByUsername": {
-			"identifier": null,
-			"message": "User does not exist",
-			"error": null
-		}
+    "data": {
+	"getCustomerByUsername": {
+	    "identifier": null,
+	    "message": "User does not exist",
+	    "error": null
 	}
+    }
 }
 ```
 
