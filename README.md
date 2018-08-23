@@ -32,9 +32,9 @@ returns
 {
     "data": {
 	"getCustomerByUsername": {
-		"identifier": null,
-		"message": "User does not exist",
-		"error": null
+	    "identifier": null,
+	    "message": "User does not exist",
+	    "error": null
 	}
     }
 }
